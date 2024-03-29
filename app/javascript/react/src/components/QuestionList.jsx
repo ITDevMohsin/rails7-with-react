@@ -23,13 +23,13 @@ const QuestionList = () => {
     const [isShowLoader, setIsShowLoader] = useState(true)
 
     const fetchQuestionList = () => {
-        setIsShowLoader(false)
+        // setIsShowLoader(false)
         fetch(questionsURL)
             .then((response) => response.json())
             .then((data) => {
                 console.log(data)
                 setQuestionsList(data)
-                data.length === 0 ? setIsShowAlert(true) : setIsShowAlert(false)
+                data.length === 0 && setIsShowAlert(true)
             })
     }
 
@@ -38,7 +38,7 @@ const QuestionList = () => {
     }, [])
 
     const updateSelectedItem = (event) => {
-        setIsShowLoader(false)
+        setIsShowLoader(true)
         setIsShowAlert(false)
         setQuestionsList([])
         setSelectedOption(event.target.value)
@@ -49,7 +49,7 @@ const QuestionList = () => {
                 setQuestionsList(data)
                 if (data.length === 0) {
                     setIsShowAlert(true)
-                    setIsShowLoader(true)
+                    setIsShowLoader(false)
                 }
             })
     }
@@ -76,4 +76,4 @@ const QuestionList = () => {
     )
 }
 
-export default QuestionList
+export default QuestionList;

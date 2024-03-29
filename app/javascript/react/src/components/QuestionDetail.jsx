@@ -84,4 +84,4 @@ class QuestionDetail extends React.Component {
     }
 }
 
-export default QuestionDetail
+export default QuestionDetail;
