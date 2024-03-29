@@ -6,26 +6,45 @@ class QuestionDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            likeCount: 0,
-            dislikeCount: 0
+            likeCount: this.props.question.likes_count,
+            dislikeCount: this.props.question.dislikes_count
         };
         this.incrementLikeCounter = this.incrementLikeCounter.bind(this)
         this.decrementLikeCounter = this.decrementLikeCounter.bind(this)
     }
 
-    incrementLikeCounter() {
+    incrementLikeCounter = () => {
         this.setState(prevState => ({
             likeCount: prevState.likeCount + 1
         }));
+        this.updateQuestionCounter({count_for: 'like'})
     }
 
-    decrementLikeCounter() {
+    decrementLikeCounter = () => {
         this.setState(prevState => ({
             dislikeCount: prevState.dislikeCount + 1
         }));
+        this.updateQuestionCounter({count_for: 'dislike'})
     }
 
-    likeBadge(likeCount) {
+    updateQuestionCounter = (data) => {
+        fetch(`http://localhost:3000/api/v1/questions/${this.props.question.id}/update_counter`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(`%c${JSON.stringify(data)}`, 'color: blue;');
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
+    likeBadge = (likeCount) => {
         return likeCount > 0 ? (
             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
             {likeCount}
