@@ -25,6 +25,14 @@ class QuestionDetail extends React.Component {
         }));
     }
 
+    likeBadge(likeCount) {
+        return likeCount > 0 ? (
+            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {likeCount}
+        </span>
+        ) : null;
+    }
+
     render() {
         return (
             <div className="card rounded-0 mt-3">
@@ -36,11 +44,7 @@ class QuestionDetail extends React.Component {
                     <button type="button" className="btn btn-primary position-relative"
                             onClick={this.incrementLikeCounter}>
                         Like
-                        {this.state.likeCount > 0 ?
-                            <span
-                                className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                           {this.state.likeCount}
-                        </span> : ''}
+                        {this.likeBadge(this.state.likeCount)}
                     </button>
                     <button className="btn btn-primary mt-1"
                             onClick={this.decrementLikeCounter}>Dislike
