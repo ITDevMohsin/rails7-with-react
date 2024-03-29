@@ -1,6 +1,7 @@
 import * as React from "react";
 import {useState, useEffect} from "react";
 import * as ReactDOM from 'react-dom';
+import ServerSideError from "./ServerSideError";
 
 const NewQuestion = () => {
     const questionsTags = [
@@ -12,11 +13,8 @@ const NewQuestion = () => {
         {label: 'Data Structure', value: 'Data Structure'}
     ]
 
-    const handleQuestionSubmit = (event) => {
-        event.preventDefault()
-        console.log(formField)
-    }
-
+    const [isServerSideError, setIsServerSideError] = useState(false)
+    const [serverErrors, setServerErrors] = useState([])
     const [formField, setFormField] = useState({
         title: '',
         tag: questionsTags[0].value
@@ -24,6 +22,37 @@ const NewQuestion = () => {
 
     const handleFormFields = (event) => {
         setFormField({...formField, [event.target.name]: event.target.value})
+    }
+
+    const handleQuestionSubmit = (event) => {
+        event.preventDefault()
+        console.log(formField)
+        createQuestion(formField)
+    }
+
+    const createQuestion = (data) => {
+        fetch(`/api/v1/questions`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Success", data)
+                if (data['status'] === 'failure') {
+                    setIsServerSideError(true)
+                    setServerErrors(data['data'])
+                } else {
+                    setIsServerSideError(false)
+                    setServerErrors([])
+                }
+            })
+            .catch((error) => {
+                console.log('Error', error)
+
+            })
     }
 
     return (
@@ -40,6 +69,7 @@ const NewQuestion = () => {
                         </div>
                         <form onSubmit={handleQuestionSubmit}>
                             <div className="modal-body">
+                                {isServerSideError && <ServerSideError errors={serverErrors}/>}
                                 <div className="form-group">
                                     <label className="form-label mt-3 mb-3">Title</label>
                                     <input type="text" className="form-control form-control-lg rounded-0"
