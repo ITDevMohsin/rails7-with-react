@@ -20,8 +20,10 @@ const QuestionList = () => {
     const questionsURL = 'http://localhost:3000/api/v1/questions'
     const [selectedOption, setSelectedOption] = useState(questionsTags[0].value)
     const [isShowAlert, setIsShowAlert] = useState(false)
+    const [isShowLoader, setIsShowLoader] = useState(true)
 
     const fetchQuestionList = () => {
+        setIsShowLoader(false)
         fetch(questionsURL)
             .then((response) => response.json())
             .then((data) => {
@@ -36,6 +38,8 @@ const QuestionList = () => {
     }, [])
 
     const updateSelectedItem = (event) => {
+        setIsShowLoader(false)
+        setIsShowAlert(false)
         setQuestionsList([])
         setSelectedOption(event.target.value)
         fetch(questionsURL + `?tags=${questionsTags[event.target.value].label}`)
@@ -43,7 +47,10 @@ const QuestionList = () => {
             .then((data) => {
                 console.log(data)
                 setQuestionsList(data)
-                data.length === 0 ? setIsShowAlert(true) : setIsShowAlert(false)
+                if (data.length === 0) {
+                    setIsShowAlert(true)
+                    setIsShowLoader(true)
+                }
             })
     }
 
@@ -61,7 +68,7 @@ const QuestionList = () => {
                     questionsList.length > 0 ?
                         questionsList.map((question) =>
                             <QuestionDetail question={question} key={question.id}/>
-                        ) : <Loader/>
+                        ) : <Loader isShowLoader={isShowLoader}/>
                 }
                 {isShowAlert && <EmptyQuestionMessage tagname={questionsTags[selectedOption].label}/>}
             </div>
