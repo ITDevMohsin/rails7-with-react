@@ -21,7 +21,7 @@ class QuestionDetail extends React.Component {
 
     decrementLikeCounter() {
         this.setState(prevState => ({
-            likeCount: prevState.likeCount - 1
+            dislikeCount: prevState.dislikeCount + 1
         }));
     }
 
@@ -29,6 +29,14 @@ class QuestionDetail extends React.Component {
         return likeCount > 0 ? (
             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
             {likeCount}
+        </span>
+        ) : null;
+    }
+
+    dislikeCount(dislikeCount) {
+        return dislikeCount > 0 ? (
+            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {dislikeCount}
         </span>
         ) : null;
     }
@@ -41,13 +49,15 @@ class QuestionDetail extends React.Component {
                     <p className="lead">
                         <span className="badge bg-primary">{this.props.question.tag}</span>
                     </p>
-                    <button type="button" className="btn btn-primary position-relative"
+                    <button type="button" className="btn btn-primary position-relative" style={{marginRight: 1 + 'em'}}
                             onClick={this.incrementLikeCounter}>
                         Like
                         {this.likeBadge(this.state.likeCount)}
                     </button>
-                    <button className="btn btn-primary mt-1"
-                            onClick={this.decrementLikeCounter}>Dislike
+                    <button type="button" className="btn btn-primary position-relative"
+                            onClick={this.decrementLikeCounter}>
+                        Dislike
+                        {this.dislikeCount(this.state.dislikeCount)}
                     </button>
                 </div>
             </div>
