@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import * as ReactDOM from 'react-dom';
 import QuestionDetail from "./QuestionDetail";
 import EmptyQuestionMessage from "./EmptyQuestionMessage";
+import Loader from "./Loader";
 
 const QuestionList = () => {
 
@@ -60,7 +61,7 @@ const QuestionList = () => {
                     questionsList.length > 0 ?
                         questionsList.map((question) =>
                             <QuestionDetail question={question} key={question.id}/>
-                        ) : ''
+                        ) : <Loader/>
                 }
                 {isShowAlert && <EmptyQuestionMessage tagname={questionsTags[selectedOption].label}/>}
             </div>
