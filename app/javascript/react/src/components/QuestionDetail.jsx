@@ -33,10 +33,15 @@ class QuestionDetail extends React.Component {
                     <p className="lead">
                         <span className="badge bg-primary">{this.props.question.tag}</span>
                     </p>
-                    <button className="btn btn-primary mt-1" onClick={this.incrementLikeCounter}>Like</button>
-                    {
-                        this.state.likeCount > 0 ? <span className="badge bg-primary">{this.state.likeCount}</span> : ''
-                    }
+                    <button type="button" className="btn btn-primary position-relative"
+                            onClick={this.incrementLikeCounter}>
+                        Like
+                        {this.state.likeCount > 0 ?
+                            <span
+                                className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                           {this.state.likeCount}
+                        </span> : ''}
+                    </button>
                     <button className="btn btn-primary mt-1"
                             onClick={this.decrementLikeCounter}>Dislike
                     </button>
